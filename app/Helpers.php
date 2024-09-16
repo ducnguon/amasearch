@@ -126,7 +126,7 @@ class Helpers extends Plugin {
     *
     * @return bool
     */
-    public function is_production() {
+    public static function is_production() {
         if( !defined('WP_ENV') ) {
           return true;
         } else {
@@ -158,7 +158,7 @@ class Helpers extends Plugin {
     *    WP_ENV is defined as anything other than 'development' or 'staging'.
     *
     * @return string
-    * @since 0.1.0
+    * @since 1.0.0
     */
   public static function get_script_version( $script, $return_minified = false, $script_version = null ) {
     $version = $script_version ?: self::$config['data']['Version'];
@@ -185,7 +185,7 @@ class Helpers extends Plugin {
     * @param bool $return_url If true, returns full-qualified URL rather than filesystem path.
     *
     * @return string The URL or path to minified or regular $script.
-    * @since 0.1.0
+    * @since 1.0.0
     */
   public static function get_script_path( $script, $return_minified = true, $return_url = false ) {
     $script = trim( $script, '/' );
@@ -203,10 +203,30 @@ class Helpers extends Plugin {
     *
     * @param string $script The relative (to the plugin folder) path to the script.
     * @param bool
-    * @since 0.1.0
+    * @since 1.0.0
     */
   public static function get_script_url( $script, $return_minified = false ) {
     return self::get_script_path( $script, $return_minified, true );
   }
 
+  /**
+   * Convert a comma separated string into an associated array.
+   * The first row should contain the array keys.
+   *
+   * @param string $string The value
+   * @param string $delimiter The separator
+   * @return array
+   * @since 1.0.0
+   */
+  public static function convert_string_to_array($string='', $delimiter=',')
+  {
+    if (!is_string($string) || empty($string))
+      return FALSE;
+
+    // sanitize the data and trim white space
+    $data = preg_replace( '/\s*,\s*/', ',', filter_var( $string, FILTER_SANITIZE_STRING ) );
+    $array = explode( $delimiter, $data );
+
+    return $array;
+  }
 }
